@@ -1,0 +1,8 @@
+-r requirements.txt
+pytest>=7
+ruff
+jupyter
+nbconvert
+ipykernel
+matplotlib
+seaborn

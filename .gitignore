@@ -1,0 +1,25 @@
+# competition data & generated outputs (never commit competition data)
+data/*
+!data/README.md
+!data/.gitkeep
+output/*
+!output/.gitkeep
+*.zip
+catboost_info/
+
+# python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+
+# notebooks / OS / editors
+.ipynb_checkpoints/
+.DS_Store
+.idea/
+.vscode/

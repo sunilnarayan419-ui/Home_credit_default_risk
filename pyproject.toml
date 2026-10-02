@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hcdr"
+version = "1.0.0"
+description = "Reproducible ROC-AUC pipeline for the Home Credit Default Risk in-class competition (GCI Global 2026)"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+dependencies = [
+    "numpy",
+    "pandas>=2.0",
+    "scikit-learn>=1.4",
+    "lightgbm>=4.0",
+    "xgboost>=2.0",
+    "catboost>=1.2",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7", "ruff", "jupyter", "nbconvert", "ipykernel", "matplotlib", "seaborn"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 140
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "B"]
