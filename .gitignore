@@ -5,6 +5,9 @@ data/*
 output/*
 !output/.gitkeep
 *.zip
+*.joblib
+.env
+.env.*
 catboost_info/
 
 # python
@@ -17,6 +20,10 @@ dist/
 venv/
 .pytest_cache/
 .ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+site/
 
 # notebooks / OS / editors
 .ipynb_checkpoints/

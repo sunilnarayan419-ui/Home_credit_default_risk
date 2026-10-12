@@ -1,0 +1,5 @@
+# runtime dependencies of the FastAPI inference service (on top of requirements.txt)
+-r requirements.txt
+fastapi>=0.110
+uvicorn[standard]>=0.29
+pydantic>=2.5
