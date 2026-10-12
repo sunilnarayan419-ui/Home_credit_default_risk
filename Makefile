@@ -1,4 +1,4 @@
-.PHONY: install install-dev lint test audit cv ablation tune submission verify notebook clean all
+.PHONY: install install-dev lint test coverage check docs docs-serve train-model api audit cv ablation tune submission verify notebook clean all
 
 PY ?= python
 
@@ -13,6 +13,24 @@ lint:
 
 test:
 	pytest
+
+coverage:      ## pytest with the coverage threshold from pyproject.toml
+	pytest --cov --cov-report=term-missing
+
+check:         ## same essential checks as CI: ruff + pytest --cov + mkdocs build --strict
+	$(PY) scripts/check_project.py
+
+docs:
+	mkdocs build --strict
+
+docs-serve:
+	mkdocs serve
+
+train-model:   ## fit on all training rows and save output/model_bundle.joblib for the API
+	$(PY) scripts/train_model.py
+
+api:           ## needs output/model_bundle.joblib (make train-model)
+	uvicorn hcdr.api.app:app
 
 audit:
 	$(PY) scripts/audit.py
@@ -39,4 +57,4 @@ notebook:      ## execute the competition notebook top to bottom (run from a fol
 all: install-dev lint test submission verify
 
 clean:
-	rm -rf .pytest_cache .ruff_cache build dist src/*.egg-info catboost_info
+	rm -rf .pytest_cache .ruff_cache .coverage coverage.xml htmlcov site build dist src/*.egg-info catboost_info

@@ -52,3 +52,32 @@ def train_df():
 @pytest.fixture
 def test_df():
     return make_frame(200, seed=2, with_target=False, start_id=200000)
+
+
+# ---- fixtures for the inference bundle and the API (all synthetic; nothing here is real customer data) ----
+@pytest.fixture(scope="session")
+def bundle():
+    """Tiny fitted HGB bundle (20 trees on 600 synthetic rows): fast, deterministic, no boosting libs needed."""
+    from hcdr.inference import fit_bundle
+
+    return fit_bundle(make_frame(600, seed=1), models=["hgb"], n_iter={"hgb": 20})
+
+
+@pytest.fixture(scope="session")
+def bundle_path(bundle, tmp_path_factory):
+    from hcdr.inference import save_bundle
+
+    return save_bundle(bundle, tmp_path_factory.mktemp("model") / "model_bundle.joblib")
+
+
+def records(n=3, seed=5):
+    """JSON-ready application dicts (NaN -> None, numpy -> python types) without ID/TARGET."""
+    import json
+
+    df = make_frame(n, seed=seed, with_target=False).drop(columns=["SK_ID_CURR"])
+    return json.loads(df.to_json(orient="records"))
+
+
+@pytest.fixture
+def payload():
+    return records(1)[0]

@@ -115,15 +115,24 @@ def build_matrix(df: pd.DataFrame, groups: tuple[str, ...] = FEATURE_GROUPS) -> 
     return out.drop(columns=[c for c in (TARGET, ID) if c in out.columns])
 
 
+def fit_categories(X: pd.DataFrame) -> dict[str, list]:
+    """Category levels of every column in CAT_COLS, learned from the given (training) frame only."""
+    return {c: sorted(X[c].dropna().unique()) for c in CAT_COLS}
+
+
+def apply_categories(X: pd.DataFrame, categories: dict[str, list]) -> pd.DataFrame:
+    """category dtype with the given levels; levels not in ``categories`` become NaN."""
+    X = X.copy()
+    for c, levels in categories.items():
+        seen = X[c].astype(object).where(X[c].isin(levels))  # unseen levels -> NaN
+        X[c] = pd.Series(pd.Categorical(seen, categories=levels), index=X.index)
+    return X
+
+
 def to_categorical(Xtr: pd.DataFrame, Xte: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     """category dtype with levels from TRAIN only (no labels involved); unseen test levels become NaN."""
-    Xtr, Xte = Xtr.copy(), Xte.copy()
-    for c in CAT_COLS:
-        levels = sorted(Xtr[c].dropna().unique())
-        Xtr[c] = pd.Series(pd.Categorical(Xtr[c], categories=levels), index=Xtr.index)
-        seen = Xte[c].astype(object).where(Xte[c].isin(levels))  # unseen levels -> NaN
-        Xte[c] = pd.Series(pd.Categorical(seen, categories=levels), index=Xte.index)
-    return Xtr, Xte
+    categories = fit_categories(Xtr)
+    return apply_categories(Xtr, categories), apply_categories(Xte, categories)
 
 
 def to_string_cat(X: pd.DataFrame) -> pd.DataFrame:

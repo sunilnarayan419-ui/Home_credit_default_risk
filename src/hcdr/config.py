@@ -14,6 +14,8 @@ ID = "SK_ID_CURR"
 ROOT = Path(__file__).resolve().parents[2]
 DATA_DIR = Path(os.environ.get("HCDR_DATA_DIR", ROOT / "data"))
 OUTPUT_DIR = Path(os.environ.get("HCDR_OUTPUT_DIR", ROOT / "output"))
+# fitted-model artifact written by scripts/train_model.py and loaded by the API (git-ignored, lives in output/)
+MODEL_PATH = Path(os.environ.get("HCDR_MODEL_PATH", OUTPUT_DIR / "model_bundle.joblib"))
 
 CAT_COLS = [
     "NAME_CONTRACT_TYPE", "CODE_GENDER", "NAME_INCOME_TYPE", "NAME_EDUCATION_TYPE",

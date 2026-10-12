@@ -6,9 +6,10 @@ from pathlib import Path
 
 import numpy as np
 
-from .config import OUTPUT_DIR, SEED
+from .config import MODEL_PATH, OUTPUT_DIR, SEED
 from .data import load_data
 from .features import prepare
+from .inference import fit_bundle, save_bundle
 from .models import available_models, fit_predict
 from .submission import validate_submission, write_submission
 
@@ -32,3 +33,18 @@ def train_and_predict(data_dir=None, out_path=None, force_fallback: bool = False
     if verbose:
         print("submission OK:", info)
     return Path(path)
+
+
+def train_and_save(data_dir=None, model_path=None, force_fallback: bool = False, n_iter: dict | None = None,
+                   verbose: bool = True) -> Path:
+    """Fit the final models on ALL training rows and persist them (plus category levels) for the API.
+
+    Uses the same models, parameters and tree counts as :func:`train_and_predict`; writes no submission.
+    """
+    np.random.seed(SEED)
+    train, _, _ = load_data(data_dir)
+    bundle = fit_bundle(train, n_iter=n_iter, force_fallback=force_fallback)
+    path = save_bundle(bundle, model_path or MODEL_PATH)
+    if verbose:
+        print(f"models: {list(bundle.models)} | features: {len(bundle.feature_columns)} | saved: {path}", flush=True)
+    return path

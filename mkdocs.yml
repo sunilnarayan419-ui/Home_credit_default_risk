@@ -1,0 +1,61 @@
+site_name: Home Credit Default Risk
+site_description: Reproducible ROC-AUC pipeline, inference API and engineering workflow for the Home Credit Default Risk in-class competition
+repo_url: https://github.com/sunilnarayan419-ui/Home_credit_default_risk
+repo_name: sunilnarayan419-ui/Home_credit_default_risk
+edit_uri: edit/main/docs/
+strict: true
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+
+nav:
+  - Home: index.md
+  - Getting started: getting-started.md
+  - Project:
+      - Architecture: architecture.md
+      - Data and features: data-and-features.md
+      - Model and evaluation: model-and-evaluation.md
+  - Inference API:
+      - API reference: api-reference.md
+  - Engineering:
+      - Testing: testing.md
+      - Development and CI: development-guide.md
+  - Reference:
+      - Limitations and responsible use: limitations.md
+      - Troubleshooting: troubleshooting.md
